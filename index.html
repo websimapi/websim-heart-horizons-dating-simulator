@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Horizons Dating Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="app">
+        <div class="app-container">
+            <div v-if="currentScreen === 'intro'" class="intro-screen">
+                <div class="app-title">
+                    <h1>Heart Horizons</h1>
+                    <p>Find your perfect match in this interactive dating adventure!</p>
+                </div>
+                <button @click="startGame" class="start-button">Start Dating</button>
+            </div>
+
+            <div v-else-if="currentScreen === 'character-select'" class="character-select">
+                <h2>Choose Your Date</h2>
+                <div class="character-grid">
+                    <div v-for="(character, index) in characters" :key="index" class="character-card" @click="selectCharacter(character)">
+                        <div class="character-img-container">
+                            <img :src="character.imageUrl || 'placeholder.svg'" @error="generateCharacterImage(character)" alt="Character portrait" class="character-img">
+                        </div>
+                        <div class="character-info">
+                            <h3>{{ character.name }}</h3>
+                            <p>{{ character.shortDescription }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-else-if="currentScreen === 'location-select'" class="location-select">
+                <h2>Where would you like to take {{ selectedCharacter.name }}?</h2>
+                <div class="location-grid">
+                    <div v-for="(location, index) in locations" :key="index" class="location-card" @click="selectLocation(location)">
+                        <div class="location-img-container">
+                            <img :src="location.imageUrl || 'placeholder.svg'" @error="generateLocationImage(location)" alt="Location" class="location-img">
+                        </div>
+                        <div class="location-info">
+                            <h3>{{ location.name }}</h3>
+                            <p>{{ location.description }}</p>
+                        </div>
+                    </div>
+                </div>
+                <button @click="goBack" class="back-button">Go Back</button>
+            </div>
+
+            <div v-else-if="currentScreen === 'date'" class="date-screen">
+                <div class="date-header">
+                    <div class="location-banner">
+                        <img :src="selectedLocation.imageUrl || 'placeholder.svg'" @error="generateLocationImage(selectedLocation)" alt="Location" class="location-banner-img">
+                        <h3>{{ selectedLocation.name }}</h3>
+                    </div>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="chat-messages" ref="chatMessages">
+                        <div v-for="(message, index) in chatHistory" :key="index" :class="['message', message.sender === 'character' ? 'from-character' : 'from-user']">
+                            <div v-if="message.sender === 'character'" class="character-avatar">
+                                <img :src="selectedCharacter.imageUrl || 'placeholder.svg'" @error="generateCharacterImage(selectedCharacter)" alt="Character avatar">
+                            </div>
+                            <div class="message-content">{{ message.text }}</div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input">
+                        <input type="text" v-model="userInput" @keyup.enter="sendMessage" placeholder="Type your message...">
+                        <button @click="sendMessage">Send</button>
+                    </div>
+                </div>
+
+                <div class="date-controls">
+                    <button @click="endDate" class="control-button">End Date</button>
+                    <button @click="changeLocation" class="control-button">Change Location</button>
+                </div>
+            </div>
+
+            <div v-else-if="currentScreen === 'end-date'" class="end-date-screen">
+                <h2>Date Completed!</h2>
+                <p>You had a {{ dateQuality }} time with {{ selectedCharacter.name }}.</p>
+                <p>{{ selectedCharacter.name }} will remember this experience.</p>
+                <div class="end-date-options">
+                    <button @click="returnToCharacterSelect" class="option-button">Meet Someone New</button>
+                    <button @click="meetAgain" class="option-button primary">Meet {{ selectedCharacter.name }} Again</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading overlay -->
+        <div v-if="isLoading" class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p>{{ loadingMessage }}</p>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

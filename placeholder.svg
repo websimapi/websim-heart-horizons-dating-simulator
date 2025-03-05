@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#f2f2f2"/>
+  <text x="150" y="150" font-family="Arial" font-size="20" fill="#888" text-anchor="middle" dominant-baseline="middle">Loading Image...</text>
+  <path d="M150,80 C117,80 90,107 90,140 C90,173 117,200 150,200 C183,200 210,173 210,140 C210,107 183,80 150,80 Z M150,190 C122.5,190 100,167.5 100,140 C100,112.5 122.5,90 150,90 C177.5,90 200,112.5 200,140 C200,167.5 177.5,190 150,190 Z" fill="#ccc"/>
+  <path d="M140,120 L140,160 L170,140 Z" fill="#ccc"/>
+</svg>
+
